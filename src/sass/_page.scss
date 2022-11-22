@@ -1,1 +1,46 @@
+*,
+*:before,
+*:after { 
+    box-sizing: border-box;
+}
 
+h1, h2, h3, h4, h5, h6{
+    margin: 0;
+    padding: 0;
+}
+
+p, li, ul, ol{
+    margin: 0;
+    padding: 0;
+}
+
+input{
+    border: none;
+}
+
+// img {
+//     display: block;
+//     width: 100%;
+//     height: auto;
+// }
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.search-form {
+    padding: 15 0px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(10, 114, 114);
+}
+
+.search-form > input {
+    max-width: 200px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 15px;
+}
