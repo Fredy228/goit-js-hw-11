@@ -18,7 +18,7 @@ export default class PicturesApiServices {
     );
     if (
       this.page > resaltSearch.data.totalHits / numberPage &&
-      resaltSearch.data.hits.length !== 0
+      resaltSearch.data.hits.length > 10
     ) {
       btnMore.style.display = 'none';
       Notify.info("We're sorry, but you've reached the end of search results.");

@@ -31,9 +31,11 @@ async function searchInputQuery(event) {
     markupPictureCards(getArrayImg.hits);
     lightbox.refresh();
     picturesApi.incrementPage();
+    if (getArrayImg.hits.length > 10) {
+      refs.btnMore.style.display = 'block';
+    }
 
     if (getArrayImg.hits.length !== 0) {
-      refs.btnMore.style.display = 'block';
       Notify.success(`Hooray! We found ${getArrayImg.totalHits} images.`);
     } else {
       Notify.failure(
