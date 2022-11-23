@@ -1,5 +1,5 @@
-const axios = require('axios').default;
 import PicturesApiServices from './fetch-images';
+import { Notify } from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
@@ -7,43 +7,64 @@ const refs = {
   form: document.querySelector('#search-form'),
   searchInput: document.querySelector('#search-input'),
   boxGallery: document.querySelector('.gallery'),
+  btnMore: document.querySelector('.load-more'),
 };
 
 const lightbox = new SimpleLightbox('.gallery a', {
-  //   enableKeyboard: true,
+  enableKeyboard: true,
 });
 
 const picturesApi = new PicturesApiServices();
 
 refs.form.addEventListener('submit', searchInputQuery);
+refs.btnMore.addEventListener('click', showMorePictures);
 
-function searchInputQuery(event) {
+async function searchInputQuery(event) {
   event.preventDefault();
+  refs.boxGallery.innerHTML = '';
+  refs.btnMore.style.display = 'none';
+  picturesApi.resetPage();
+
   if (refs.searchInput.value !== '') {
     picturesApi.query = refs.searchInput.value;
-    picturesApi.fetchPictures().then(dataSearch => {
-      markupPictureCards(dataSearch);
-      lightbox.refresh();
-    });
+    const getArrayImg = await picturesApi.fetchPictures();
+    markupPictureCards(getArrayImg.hits);
+    picturesApi.incrementPage();
+
+    if (getArrayImg.hits.length !== 0) {
+      refs.btnMore.style.display = 'block';
+      Notify.success(`Hooray! We found ${getArrayImg.totalHits} images.`);
+    } else {
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    }
   }
 }
 
-function markupPictureCards(dataSearch) {
-  const markup = dataSearch.map(card => {
-    return `<a href="${card.largeImageURL}"><div class="photo-card">
+async function showMorePictures() {
+  const getArrayImg = await picturesApi.fetchPictures();
+  markupPictureCards(getArrayImg.hits);
+  lightbox.refresh();
+  picturesApi.incrementPage();
+}
+
+function markupPictureCards(getArrayImg) {
+  const markup = getArrayImg.map(card => {
+    return `<a class="gallery__item" href="${card.largeImageURL}"><div class="photo-card">
     <img src="${card.webformatURL}" alt="${card.tags}" loading="lazy" />
     <div class="info">
       <p class="info-item">
-        <b>${card.likes}</b>
+        <b>Likes</b> ${card.likes}
       </p>
       <p class="info-item">
-        <b>${card.views}</b>
+        <b>Views</b> ${card.views}
       </p>
       <p class="info-item">
-        <b>${card.comments}</b>
+        <b>Comments</b> ${card.comments}
       </p>
       <p class="info-item">
-        <b>${card.downloads}</b>
+        <b>Downloads</b> ${card.downloads}
       </p>
     </div>
   </div></a>`;
