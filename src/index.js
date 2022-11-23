@@ -29,6 +29,7 @@ async function searchInputQuery(event) {
     picturesApi.query = refs.searchInput.value;
     const getArrayImg = await picturesApi.fetchPictures();
     markupPictureCards(getArrayImg.hits);
+    lightbox.refresh();
     picturesApi.incrementPage();
 
     if (getArrayImg.hits.length !== 0) {
@@ -51,8 +52,8 @@ async function showMorePictures() {
 
 function markupPictureCards(getArrayImg) {
   const markup = getArrayImg.map(card => {
-    return `<a class="gallery__item" href="${card.largeImageURL}"><div class="photo-card">
-    <img src="${card.webformatURL}" alt="${card.tags}" loading="lazy" />
+    return `<a href="${card.largeImageURL}"><div class="photo-card">
+    <img src="${card.webformatURL}" alt="${card.tags}" loading="lazy"/>
     <div class="info">
       <p class="info-item">
         <b>Likes</b> ${card.likes}

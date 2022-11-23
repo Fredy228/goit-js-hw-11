@@ -50,7 +50,7 @@ input{
     flex-wrap: wrap;
 }
 
-.gallery__item {
+a {
     margin: 10px auto;
     flex-basis: calc(100% / 4 - 20px);
     text-decoration: none;
